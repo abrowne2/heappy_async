@@ -29,3 +29,4 @@ pprof = {version = "^0.13.0", features = [ "prost-codec", "flamegraph", "protobu
 spin = "0.9.8"
 tikv-jemalloc-sys = { version = "0.5.4", optional = true, features = [ "stats" ] }
 thiserror = "^1.0.59"
+tokio = { version = "1.0", features = ["full"] }

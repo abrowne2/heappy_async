@@ -3,11 +3,10 @@ use std::collections::{HashMap, HashSet};
 use std::hash::{Hash, Hasher};
 use std::io::Write;
 use std::mem::MaybeUninit;
-use std::sync::{
-    atomic::{AtomicBool, Ordering},
-    Mutex, MutexGuard,
-};
+use std::sync::atomic::{AtomicBool, Ordering};
+
 use std::time::SystemTime;
+use tokio::sync::{Mutex, MutexGuard};
 
 use backtrace::Frame;
 use pprof::protos::Message;
@@ -39,10 +38,8 @@ pub struct HeapProfilerGuard {
 }
 
 impl HeapProfilerGuard {
-    pub fn new(period: usize) -> Result<Self> {
-        let guard = HEAP_PROFILER_ENTER
-            .try_lock()
-            .map_err(|_| Error::ConcurrentHeapProfiler)?;
+    pub async fn new(period: usize) -> Result<Self> {
+        let guard = HEAP_PROFILER_ENTER.lock().await;
         Profiler::start(period);
         Ok(Self { _guard: guard })
     }
