@@ -44,7 +44,7 @@ impl HeapProfilerGuard {
     }
 
     pub async fn report(self) -> HeapReport {
-        std::mem::drop(self);
+        Profiler::stop();
         HeapReport::new().await
     }
 }
